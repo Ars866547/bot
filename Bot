@@ -1,0 +1,105 @@
+#coding=utf-8
+import telebot
+from telebot import types
+
+bot = telebot.TeleBot("мой токкен")
+
+medicines = {
+    "Бальзам ElCaptain Colocynth": ("https://biodaru.ru/image/cache/catalog/product/ointment-colocynth/ointment-colocynth-270x270.jpg", "ElCaptain Colocynth"),
+    "Диабелат": ("https://biodaru.ru/image/cache/catalog/product/diabelat/diabelat-2-270x270.jpg", "Нурофен — нестероидный противовоспалительный препарат."),
+    "Bladder": ("https://biodaru.ru/image/cache/catalog/product/bladder-ointment/bladder-ointment-2-270x270.jpg", "Парацетамол — анальгетик-антипиретик."),
+    "Ostrish Fat средство при болях суставов": ("https://biodaru.ru/image/cache/catalog/product/ostrish-fat/ostrish-fat-2-270x270.jpg", "Натуральная египетская мазь со страусиным жиром Ostrish Fat является сильнодействующим средством при боли в позвоночнике, шейном и поясничном отделах, ревматизме и растяжении. Быстро впитывается и не оставляет жирного блеска.\nСостав: страусиный жир, куда входят необходимые витамины и аминокислоты, Омега 3, Омега 6 и Омега 9, натуральное масло эвкалипта, масло лимона, натуральное масло розмарина, карвон."),
+    "Авиэк - для вывода солей": ("https://biodaru.ru/image/cache/catalog/product/aviek/aviek-270x270.jpg", "Органический состав добавки не содержит синтетических или химических соединений. Продукт полностью натуральный, содержит исключительно компоненты растительного происхождения"),
+
+}
+
+kosmetika = {
+    "Африканское чёрное мыло Dudu Osun": ("https://biodaru.ru/image/cache/catalog/product/dudu/dudu-osun-270x270.jpg", "Африканское черное мыло Dudu Osun поможет раз и навсегда избавиться от косметических недугов за короткий промежуток времени. Миллионы людей во всем мире оценили его эффективность."),
+    "Зуют от выпадения волос": ("https://biodaru.ru/image/cache/catalog/product/zuyt/zuyt-270x270.jpg", "Это уникальный комплекс натуральных питательных масел против выпадения волос и для стимуляции их роста."),
+    "Мыло Afnan против угрей": ("https://biodaru.ru/image/cache/catalog/product/afnan-mylo-soap/afnan-mylo-soap-2-270x270.jpg", "Мыло Афнан (Afnan) против прыщей и угрей оказывает противовоспалительное действие и при этом подавляет рост патогенной микрофлоры, которая провоцирует развитие акне"),
+
+}
+
+#обработчик команды /start
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    startmenu = types.ReplyKeyboardMarkup(True, True)
+    startmenu.row('О компании', 'Каталог')
+    startmenu.row('Оплата и доставка', 'Контакты')
+    bot.send_message(message.chat.id, "Добро пожаловать в наш интернет-магазин!", reply_markup=startmenu)
+
+@bot.message_handler(content_types=['text'])
+def next1(message):
+    if message.text == 'О компании':
+        klava = types.ReplyKeyboardMarkup(True, False)
+        klava.row('Главное меню')
+        send = bot.send_message(message.chat.id, 'Препараты на основе трав от компании «Биодару» - это проверенная и безопасная продукция, обладающая высокой эффективностью в борьбе против многих заболеваний. Компания занимается разработкой травяной продукции для народной медицины, мы подбираем качественную рецептуру с наиболее действенной рецептурой. Бренд появился в городе Бишкек. Он занимается созданием надежных и безопасных препаратов из натуральных компонентов. Мы обеспечиваем своих клиентов абсолютно натуральной продукцией для лечения многих заболеваний различного типа.', reply_markup=klava)
+
+    elif message.text == 'Каталог':
+        klava4 = types.ReplyKeyboardMarkup(True, False)
+        klava4.row('Главное меню')
+        inline_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        # создание кнопок
+        button1 = types.InlineKeyboardButton(text='Здоровье', callback_data='button1')
+        button2 = types.InlineKeyboardButton(text='косметика', callback_data='button2')
+
+        # добавление кнопок в клавиатуру
+        inline_keyboard.add(button1, button2,)
+        # отправка сообщения с клавиатурой
+        bot.send_message(message.chat.id, "Выберите категорию:", reply_markup=inline_keyboard)
+        bot.send_message(message.chat.id, "или вернитесь в главное меню:", reply_markup=klava4)
+
+    elif message.text == 'Оплата и доставка':
+        klava2 = types.ReplyKeyboardMarkup(True, False)
+        klava2.row('Главное меню')
+        send = bot.send_message(message.chat.id, 'Оплата продукции возможна любым удобным способом на указанные компанией реквизиты или наложенным платежом. Мы предлагаем удобные условия для сотрудничества.\nДоставкаДоставка продукции осуществляется по всему миру! Где бы вы ни находились, вы всегда можете приобрести нашу продукцию по выгодной стоимости с доставкой на дом. Мы быстро оформляем все заявки и в короткие сроки доставляем заказчику товар.При расчете стоимости доставки Почтой России наш сайт пользуется расчетами', reply_markup=klava2)
+
+    elif message.text == 'Контакты':
+        klava3 = types.ReplyKeyboardMarkup(True, False)
+        klava3.row('Главное меню')
+        send = bot.send_message(message.chat.id, 'Мы находимся: Хасавюрт, улица С-М. Абубакарова, 14\nГрафик Работы: Пн-Вс 10.00 - 18.00, Пт 14.00-18.00\nТелефон 8 (800) 511-58-57\nПочта: info@biodaru.ru', reply_markup=klava3)
+
+
+    elif message.text == 'Главное меню':
+        startmenu = types.ReplyKeyboardMarkup(True, True)
+        startmenu.row('О компании', 'Каталог')
+        startmenu.row('Оплата и доставка', 'Контакты')
+        bot.send_message(message.chat.id, 'Вы снова в главном меню.', reply_markup=startmenu)
+
+@bot.callback_query_handler(func=lambda call: True)
+def handle_query(call):
+    if call.data == "button1":
+        inline_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        for medicine in medicines:
+            button = types.InlineKeyboardButton(text=medicine, callback_data=medicine)
+            inline_keyboard.add(button)
+        bot.send_message(call.message.chat.id, "Выберите лекарство:", reply_markup=inline_keyboard)
+
+    elif call.data in medicines:
+        # Получение информации о лекарстве из словаря
+        medicine = medicines[call.data]
+        photo_url = medicine[0]
+        description = medicine[1]
+        # Создание сообщения с фото и описанием
+        bot.send_photo(call.message.chat.id, photo_url)
+        bot.send_message(call.message.chat.id, description)
+
+    elif call.data == "button2":
+        inline_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        for kosmetik in kosmetika:
+            button = types.InlineKeyboardButton(text=kosmetik, callback_data=kosmetik)
+            inline_keyboard.add(button)
+        bot.send_message(call.message.chat.id, "Выберите лекарство:", reply_markup=inline_keyboard)
+
+    elif call.data in kosmetika:
+        # Получение информации о лекарстве из словаря
+        kosmetik = kosmetika[call.data]
+        photo_url = kosmetik[0]
+        description = kosmetik[1]
+        # Создание сообщения с фото и описанием
+        bot.send_photo(call.message.chat.id, photo_url)
+        bot.send_message(call.message.chat.id, description)
+
+
+
+bot.polling()
